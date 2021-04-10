@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package v1;
+
+option go_package = "./;v1";
+
+message Response {
+    string api = 1;
+    string status = 2;
+    string status_message = 3;
+}

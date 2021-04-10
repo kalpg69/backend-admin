@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package v1;
+
+option go_package = "./;v1";
+
+import "src/protos/v1/api_response.proto";
+import "google/api/annotations.proto";
+
+message Customer {
+    string customer_code = 1;
+    string customer_name = 2;
+    string customer_address = 3;
+    string customer_email = 4;
+    string customer_phone = 5;
+    string last_updated_by = 6;
+}
+
+message CreateCustomerRequest {
+    string api = 1;
+    Customer customer = 2;
+}
+
+message CreateCustomerResponse {
+    Response response = 1;
+}
+
+message UpdateCustomerRequest {
+    string api = 1;
+    string customer_code = 2;
+    Customer customer = 3;
+}
+
+message UpdateCustomerResponse {
+Response response = 1;
+}
+
+message DeleteCustomerRequest {
+    string api = 1;
+    string customer_code = 2;
+}
+
+message DeleteCustomerResponse {
+    Response response = 1;
+}
+
+service CustomerService {
+
+    rpc CreateCustomer (CreateCustomerRequest) returns (CreateCustomerResponse) {
+        option (google.api.http) = {
+            post: "/v1/customer"
+            body: "*"
+        };
+    }
+
+    rpc UpdateCustomer (UpdateCustomerRequest) returns (UpdateCustomerResponse) {
+        option (google.api.http) = {
+            put: "/v1/customer/{customer_code}"
+            body:"*"
+        };
+    }
+
+    rpc DeleteCustomer (DeleteCustomerRequest) returns (DeleteCustomerResponse) {
+        option (google.api.http) = {
+            delete: "/v1/customer/{customer_code}"
+        };
+    }
+}

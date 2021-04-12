@@ -7,6 +7,7 @@ import (
 	v1 "github.com/kalpg69/backend-admin/src/api/v1"
 	"github.com/kalpg69/backend-admin/src/clients/sqlclients"
 	"github.com/kalpg69/backend-admin/src/config"
+	"github.com/kalpg69/backend-admin/src/protocols/rest"
 	"github.com/kalpg69/backend-admin/src/services"
 	"google.golang.org/grpc"
 )
@@ -22,11 +23,16 @@ func StartApp(ctx context.Context, networkConfig *config.NetworkConfig, sqlConfi
 
 	grpcServer := grpc.NewServer(opts...)
 	v1.RegisterCustomerServiceServer(grpcServer, services.NewCustomerServiceServer(db))
+	v1.RegisterUserServiceServer(grpcServer, services.NewUserServiceServer(db))
 
 	lis, err := net.Listen("tcp", networkConfig.GRPCServerAddress+":"+networkConfig.GRPCPort)
 	if err != nil {
 		return err
 	}
+
+	go func() {
+		_ = rest.StartRestServer(ctx, networkConfig)
+	}()
 
 	grpcServer.Serve(lis)
 	return nil

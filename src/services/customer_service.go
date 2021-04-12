@@ -11,11 +11,7 @@ import (
 )
 
 const (
-	apiVersion                      = "v1"
 	queryCreateUpdateDeleteCustomer = "CreateUpdateDeleteCustomer"
-	createOperationType             = "I"
-	updatedOperationType            = "U"
-	deleteOperationType             = "D"
 )
 
 type customerServiceServer struct {
